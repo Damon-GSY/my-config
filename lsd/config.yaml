@@ -1,0 +1,30 @@
+# ~/.config/lsd/config.yaml
+
+# 默认显示哪些列（配合 -l/long 模式最有用）
+blocks:
+  - permission
+  - size
+  - date
+  - name
+
+# 默认排序：按最近修改时间
+sorting:
+  column: time
+  reverse: false
+  dir-grouping: none
+
+# macOS + Nerd Font：建议直接开图标
+icons:
+  when: always
+  theme: fancy
+
+# 颜色：启用自动配色（用默认主题即可）
+color:
+  when: auto
+  theme: default
+
+# 可选：开启/关闭一些“杂项”显示
+# 下面这些字段不同版本可能略有差异；如果你的 lsd 报 unknown key，就删掉对应行。
+hyperlink: auto
+symlink-arrow: "⇒"
+
