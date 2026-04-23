@@ -216,63 +216,6 @@ install_yazi() {
 #  配置 shell
 # ═══════════════════════════════════════════════════════════════
 
-# ── 配置 zsh (macOS 默认 shell) ─────────────────────────────
-configure_zsh() {
-    step "配置 zsh ..."
-    local rc="$HOME/.zshrc"
-    backup_config "$rc"
-
-    # macOS brew 补全 PATH
-    if [[ "$OS" == "macos" ]] && [[ -d /opt/homebrew/bin ]]; then
-        append_line "$rc" 'eval "$(/opt/homebrew/bin/brew shellenv)"'
-    fi
-
-    # alias
-    append_line "$rc" "alias ls='ls --color=auto'"
-    append_line "$rc" "alias ll='ls -alF'"
-    append_line "$rc" "alias la='ls -A'"
-    append_line "$rc" "alias l='ls -CF'"
-    append_line "$rc" "alias grep='grep --color=auto'"
-
-    # zoxide
-    if installed zoxide; then
-        append_line "$rc" 'eval "$(zoxide init zsh)"'
-    fi
-
-    # starship
-    if installed starship; then
-        append_line "$rc" 'eval "$(starship init zsh)"'
-    fi
-
-    info "zsh 配置完成"
-}
-
-# ── 配置 bash (Linux 默认 shell) ────────────────────────────
-configure_bash() {
-    step "配置 bash ..."
-    local rc="$HOME/.bashrc"
-    backup_config "$rc"
-
-    # alias
-    append_line "$rc" "alias ls='ls --color=auto'"
-    append_line "$rc" "alias ll='ls -alF'"
-    append_line "$rc" "alias la='ls -A'"
-    append_line "$rc" "alias l='ls -CF'"
-    append_line "$rc" "alias grep='grep --color=auto'"
-
-    # zoxide
-    if installed zoxide; then
-        append_line "$rc" 'eval "$(zoxide init bash)"'
-    fi
-
-    # starship
-    if installed starship; then
-        append_line "$rc" 'eval "$(starship init bash)"'
-    fi
-
-    info "bash 配置完成"
-}
-
 # ── 配置 fish ────────────────────────────────────────────────
 configure_fish() {
     if ! installed fish; then return 0; fi
@@ -283,7 +226,7 @@ configure_fish() {
     backup_config "$conf"
     mkdir -p "$fish_dir"
 
-    # macOS brew PATH for fish
+    # macOS brew PATH
     if [[ "$OS" == "macos" ]] && [[ -d /opt/homebrew/bin ]]; then
         append_line "$conf" 'fish_add_path --path /opt/homebrew/bin'
     fi
@@ -292,6 +235,7 @@ configure_fish() {
     append_line "$conf" "abbr -a ll 'ls -alF'"
     append_line "$conf" "abbr -a la 'ls -A'"
     append_line "$conf" "abbr -a l 'ls -CF'"
+    append_line "$conf" "abbr -a grep 'grep --color=auto'"
 
     # zoxide (官方 fish 写法)
     if installed zoxide; then
@@ -321,11 +265,13 @@ YAZI_EOF
         fi
     fi
 
-    # ~/.local/bin to PATH (zoxide 等可能装到这里)
+    # ~/.local/bin to PATH
     append_line "$conf" 'fish_add_path --path ~/.local/bin 2>/dev/null'
 
     info "fish 配置完成"
 }
+
+
 
 # ── starship.toml（极简配置）─────────────────────────────────
 configure_starship() {
@@ -408,12 +354,7 @@ main() {
     echo "──────────── 配置 shell ─────────────"
     echo ""
 
-    # macOS 默认 zsh，Linux 默认 bash，fish 额外配置
-    if [[ "$OS" == "macos" ]]; then
-        configure_zsh
-    else
-        configure_bash
-    fi
+    # macOS/Linux 统一用 fish 配置
     configure_fish
     configure_starship
 
@@ -422,34 +363,17 @@ main() {
     info "全部安装配置完成！"
     echo ""
     echo "后续操作："
-    if [[ "$OS" == "macos" ]]; then
-        echo "  1. 安装 Nerd Font（Starship 图标需要）"
-        echo "     → https://www.nerdfonts.com/font-downloads"
-        echo "     推荐在 iTerm2 / Terminal 中设置字体"
-        echo ""
-        echo "  2. 将 fish 设为默认 shell（可选）："
-        echo "     chsh -s \$(which fish)"
-        echo ""
-        echo "  3. 重新打开终端使配置生效"
-        echo ""
-        echo "配置文件位置："
-        echo "  zsh      → ~/.zshrc"
-        echo "  fish     → ~/.config/fish/config.fish"
-        echo "  starship → ~/.config/starship.toml"
-    else
-        echo "  1. 安装 Nerd Font（Starship 图标需要）"
-        echo "     → https://www.nerdfonts.com/font-downloads"
-        echo ""
-        echo "  2. 将 fish 设为默认 shell（可选）："
-        echo "     chsh -s \$(which fish)"
-        echo ""
-        echo "  3. 重新打开终端使配置生效"
-        echo ""
-        echo "配置文件位置："
-        echo "  bash     → ~/.bashrc"
-        echo "  fish     → ~/.config/fish/config.fish"
-        echo "  starship → ~/.config/starship.toml"
-    fi
+    echo "  1. 将 fish 设为默认 shell："
+    echo "     chsh -s \$(which fish)"
+    echo ""
+    echo "  2. 安装 Nerd Font（Starship 图标需要）"
+    echo "     → https://www.nerdfonts.com/font-downloads"
+    echo ""
+    echo "  3. 重新打开终端使配置生效"
+    echo ""
+    echo "配置文件位置："
+    echo "  fish     → ~/.config/fish/config.fish"
+    echo "  starship → ~/.config/starship.toml"
     echo "=========================================="
 }
 
