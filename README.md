@@ -1,15 +1,39 @@
-used tool:
-1. yazi
-2. fd
-3. fish + starship
-4. bat
-5. eza
-6. zoxide
-7. ripgrep
-8. tmux
-9. jq
-10. ghossty
-11. btop
-12. chezmoi
-13. uv
-14. fzf
+# My Config
+
+Personal configuration files managed by [chezmoi](https://www.chezmoi.io/).
+
+## Quick Start
+
+```bash
+# Install chezmoi
+brew install chezmoi           # macOS
+sh -c "$(curl -fsLS get.chezmoi.io)"  # Linux
+
+# Apply configs
+chezmoi init Damon-GSY/my-config --apply
+```
+
+## What's Managed
+
+- **nvim** — LazyVim config (`~/.config/nvim/`)
+- **tmux** — tmux + TPM plugins (`~/.config/tmux/`)
+- **lsd** — lsd config (`~/.config/lsd/`)
+- **karabiner** — Karabiner-Elements (macOS only)
+
+## Tools
+
+Install script runs automatically on first apply (`run_once_install-tools.sh`):
+- fish, starship, yazi, ripgrep, fd, zoxide, jq, btop, eza
+
+## Structure
+
+```
+├── dot_config/          → ~/.config/
+│   ├── nvim/
+│   ├── tmux/
+│   ├── lsd/
+│   └── karabiner/       (macOS only)
+├── .chezmoiignore       # OS-specific exclusions
+├── .chezmoiscripts/     # Run-once scripts
+└── README.md
+```

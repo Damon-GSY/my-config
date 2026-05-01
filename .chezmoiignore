@@ -1,0 +1,7 @@
+# macOS-only: skip on Linux
+{{ if ne .chezmoi.os "darwin" }}
+.config/karabiner
+{{ end }}
+
+# Managed externally (TPM, npm, etc.)
+.config/tmux/plugins
